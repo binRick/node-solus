@@ -1,5 +1,7 @@
 'use strict';
-var request = require('request');
+var request = require('request'),
+generatePassword = require('password-generator');
+
 
 var solus = Object.create(null, {
     base_config: {
@@ -94,6 +96,18 @@ solus.sQuery = function(params, callback) {
     return request.get(solus.generateHostUrl(params), callback);
 };
 
+solus.createClient = function(C, callback) {
+C.password=C.password||generatePassword();
+    this.sQuery({
+        action: 'client-create',
+        username: C.username,
+        password: C.password,
+        email: C.email,
+        firstname: C.firstname,
+        lastname: C.lastname,
+        company: C.company,
+    }, callback);
+};
 solus.listNodesById = function(virtType, callback) {
     this.sQuery({
         action: 'node-idlist',
@@ -124,11 +138,20 @@ solus.virtualServerInfo = function(vserverId, callback) {
 solus.query = function(method, input, returnKey, cb) {
     solus[method](input, function(e, s) {
         if (e) cb(e, null);
+var J = JSON.parse(s.body);
         //console.log(s.body);
-        cb(e, JSON.parse(s.body)[returnKey]);
+if(typeof(returnKey)=='string')
+        cb(e, J[returnKey]);
+else
+	cb(e, J);
     });
 };
 
+solus.CreateClient = function(C, cb) {
+    solus.query('createClient', C, null, function(e, s) {
+        cb(e, s);
+    });
+};
 
 solus.NodeIDs = function(type, cb) {
     solus.query('listNodesById', type, 'nodes', function(e, s) {
