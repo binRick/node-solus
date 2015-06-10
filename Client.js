@@ -24,7 +24,7 @@ var VM = {
     node: Node,
     nodegroup: NodeGroup,
     hostname: 'vmNodeDevHostname',
-    password: 'myPassword20!%',
+//    password: '',
     username: Client.username,
     template: Template,
     ips: '1',

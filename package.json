@@ -1,0 +1,23 @@
+{
+  "name": "node-solus",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/binRick/node-solus.git"
+  },
+  "author": "Rick Blundell",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/binRick/node-solus/issues"
+  },
+  "homepage": "https://github.com/binRick/node-solus#readme",
+  "dependencies": {
+    "password-generator": "^1.0.0",
+    "request": "^2.57.0"
+  }
+}
