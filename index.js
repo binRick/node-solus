@@ -1,6 +1,6 @@
 'use strict';
 var request = require('request'),
-generatePassword = require('password-generator');
+    generatePassword = require('password-generator');
 
 
 var solus = Object.create(null, {
@@ -95,9 +95,31 @@ solus.sQuery = function(params, callback) {
     // execute response
     return request.get(solus.generateHostUrl(params), callback);
 };
-
+solus.createVM = function(VM, callback) {
+    VM.type=VM.type||'openvz';
+    VM.ips=VM.ips||'1';
+    VM.plan=VM.plan||'Standard';
+    VM.hostname=VM.hostname||'undefinedHostname';
+    VM.password=VM.password||generatePassword();
+    this.sQuery({
+        action: 'vserver-create',
+        type: VM.type,
+        node: VM.node,
+        nodegroup: VM.nodegroup,
+        hostname: VM.hostname,
+        password: VM.password,
+        username: VM.username,
+        plan: VM.plan,
+        template: VM.template,
+        ips: VM.ips,
+        custommemory: VM.memory+':'+VM.swap,
+//custommemoryswap: VM.swap,
+        customdiskspace: VM.disk,
+        customcpu: VM.cpu,
+    }, callback);
+};
 solus.createClient = function(C, callback) {
-C.password=C.password||generatePassword();
+    C.password = C.password || generatePassword();
     this.sQuery({
         action: 'client-create',
         username: C.username,
@@ -138,15 +160,20 @@ solus.virtualServerInfo = function(vserverId, callback) {
 solus.query = function(method, input, returnKey, cb) {
     solus[method](input, function(e, s) {
         if (e) cb(e, null);
-var J = JSON.parse(s.body);
+        var J = JSON.parse(s.body);
         //console.log(s.body);
-if(typeof(returnKey)=='string')
-        cb(e, J[returnKey]);
-else
-	cb(e, J);
+        if (typeof(returnKey) == 'string')
+            cb(e, J[returnKey]);
+        else
+            cb(e, J);
     });
 };
 
+solus.CreateVM = function(VM, cb) {
+    solus.query('createVM', VM, null, function(e, vm) {
+        cb(e, vm);
+    });
+};
 solus.CreateClient = function(C, cb) {
     solus.query('createClient', C, null, function(e, s) {
         cb(e, s);

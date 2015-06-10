@@ -6,19 +6,43 @@ var Config = require('./sConf'),
 
 Solus.setConfig(Config);
 var nodeID = 111;
+var NodeGroup = '';
+var Node = 'intrepid';
+var Template = 'centos-6-x86_64';
+//var Plan='default';
+
 var Client = {
     firstname: 'tRick',
     lastname: 'rBl',
     company: 'tComp',
-    username: 'rtUser1',
+    username: 'rtUserRick',
     email: 'asdasd@asdsad.com',
     //password: 'as08dya97sdyt23',//If not specified, 10 char random and returned on response as password key
 };
-
+var VM = {
+    type: 'openvz',
+    node: Node,
+    nodegroup: NodeGroup,
+    hostname: 'vmNodeDevHostname',
+    password: 'myPassword20!%',
+    username: Client.username,
+    template: Template,
+    ips: '1',
+    memory: '512',
+    swap: '2048',
+    cpu: '2',
+    disk: '20',
+};
+Solus.CreateVM(VM, function(e, VM) {
+    if (e) throw e;
+    console.log('VM', VM);
+});
+/*
 Solus.CreateClient(Client, function(e, Client) {
     if (e) throw e;
     console.log('Client', Client);
 });
+*/
 /*
 Solus.NodeIDs('openvz', function(e, nodes) {
     if (e) throw e;
