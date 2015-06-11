@@ -105,7 +105,7 @@ solus.createVM = function(VM, callback) {
         action: 'vserver-create',
         type: VM.type,
         node: VM.node,
-        nodegroup: VM.nodegroup,
+//        nodegroup: VM.nodegroup,
         hostname: VM.hostname,
         password: VM.password,
         username: VM.username,

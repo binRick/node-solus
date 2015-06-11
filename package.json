@@ -18,6 +18,8 @@
   "homepage": "https://github.com/binRick/node-solus#readme",
   "dependencies": {
     "password-generator": "^1.0.0",
-    "request": "^2.57.0"
+    "prettyjson": "^1.1.2",
+    "request": "^2.57.0",
+    "underscore": "^1.8.3"
   }
 }
