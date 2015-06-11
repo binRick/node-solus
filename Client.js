@@ -15,7 +15,7 @@ var Client = {
     firstname: 'tRick',
     lastname: 'rBl',
     company: 'tComp',
-    username: 'rtUserRick',
+    username: 'u8201',
     email: 'asdasd@asdsad.com',
     //password: 'as08dya97sdyt23',//If not specified, 10 char random and returned on response as password key
 };
@@ -24,7 +24,7 @@ var VM = {
     node: Node,
     nodegroup: NodeGroup,
     hostname: 'vmNodeDevHostname',
-//    password: '',
+    //    password: '',
     username: Client.username,
     template: Template,
     ips: '1',
@@ -33,17 +33,20 @@ var VM = {
     cpu: '2',
     disk: '20',
 };
+Solus.CheckClientExists(Client.username, function(e, Exists) {
+    if (e) throw e;
+    console.log('Client Exists:', Exists);
+    if (!Exists)
+        Solus.CreateClient(Client, function(e, Client) {
+            if (e) throw e;
+            console.log('Client', Client);
+        });
+});
+/*
 Solus.CreateVM(VM, function(e, VM) {
     if (e) throw e;
     console.log('VM', VM);
 });
-/*
-Solus.CreateClient(Client, function(e, Client) {
-    if (e) throw e;
-    console.log('Client', Client);
-});
-*/
-/*
 Solus.NodeIDs('openvz', function(e, nodes) {
     if (e) throw e;
     console.log('nodes', nodes);

@@ -96,11 +96,11 @@ solus.sQuery = function(params, callback) {
     return request.get(solus.generateHostUrl(params), callback);
 };
 solus.createVM = function(VM, callback) {
-    VM.type=VM.type||'openvz';
-    VM.ips=VM.ips||'1';
-    VM.plan=VM.plan||'Standard';
-    VM.hostname=VM.hostname||'undefinedHostname';
-    VM.password=VM.password||generatePassword();
+    VM.type = VM.type || 'openvz';
+    VM.ips = VM.ips || '1';
+    VM.plan = VM.plan || 'Standard';
+    VM.hostname = VM.hostname || 'undefinedHostname';
+    VM.password = VM.password || generatePassword();
     this.sQuery({
         action: 'vserver-create',
         type: VM.type,
@@ -112,8 +112,8 @@ solus.createVM = function(VM, callback) {
         plan: VM.plan,
         template: VM.template,
         ips: VM.ips,
-        custommemory: VM.memory+':'+VM.swap,
-//custommemoryswap: VM.swap,
+        custommemory: VM.memory + ':' + VM.swap,
+        //custommemoryswap: VM.swap,
         customdiskspace: VM.disk,
         customcpu: VM.cpu,
     }, callback);
@@ -137,6 +137,12 @@ solus.listNodesById = function(virtType, callback) {
     }, callback);
 };
 
+solus.checkClientExists = function(str, callback) {
+    this.sQuery({
+        action: 'client-checkexists',
+        username: str
+    }, callback);
+};
 solus.listNodesByName = function(virtType, callback) {
     this.sQuery({
         action: 'listnodes',
@@ -169,6 +175,14 @@ solus.query = function(method, input, returnKey, cb) {
     });
 };
 
+solus.CheckClientExists = function(username, cb) {
+    solus.query('checkClientExists', username, null, function(e, r) {
+        if (r.statusmsg == 'Client not found')
+            return cb(e, false);
+        else
+            return cb(e, true);
+    });
+};
 solus.CreateVM = function(VM, cb) {
     solus.query('createVM', VM, null, function(e, vm) {
         cb(e, vm);
