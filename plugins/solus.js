@@ -5,7 +5,7 @@ module.exports.Events = {
         validate: function(reqJson) {
             return reqJson.meta.solusvmid == 0 && reqJson.config.apiType == 'openvz' && reqJson.meta.ctid == '' && reqJson.service.desserv.length > 0;
         },
-        setup(reqJson, cb) {
+        setup: function(reqJson, cb) {
             var Setup = {
                 type: reqJson.config.apiType,
                 node: req.config.apiNode,
@@ -15,6 +15,9 @@ module.exports.Events = {
             };
             if (reqJson.service.password && reqJson.service.password.length > 6)
                 Setup.password = reqJson.service.password;
+
+
+ 		cb(null, Setup);
         },
     },
 
