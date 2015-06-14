@@ -8,13 +8,9 @@ var Solus = require('./'),
 
 module.exports = function(reqJson, CB) {
     Solus.setConfig(Config);
-
     var v = plugin.Events.createClient.validate;
     var s = plugin.Events.createClient.setup;
     var p = plugin.Events.createClient.process;
-    //var reqJson = JSON.parse(fs.readFileSync('../uberPostData.json'));
-
-    //console.log(reqJson.config);
     var client = new UbersmithAPI(reqJson.config.uberApiUser, reqJson.config.uberApiToken, reqJson.config.uberApiUrl + '/api/2.0/');
     var api_calls = {};
     api_calls['client.get'] = {
@@ -36,7 +32,6 @@ module.exports = function(reqJson, CB) {
                 if (e) throw e;
                 p(Solus, Setup, reqJson, function(e, res) {
                     if (e) throw e;
-                    //                console.log('done', res);
                     var v2 = plugin.Events.createVM.validate;
                     var s2 = plugin.Events.createVM.setup;
                     var p2 = plugin.Events.createVM.process;
@@ -57,14 +52,10 @@ module.exports = function(reqJson, CB) {
 
 
                             var V2 = v2(reqJson);
-                            //console.log(V2);
-                            //process.exit();
                             if (!V2) {
                                 var msg = 'Failed to Create VM. This is usually because a solusvmid already exists on this service';
                                 console.log(msg);
                                 return CB(msg, null);
-                                //                           throw msg;
-                                //                         
                             } else {
                                 s2(reqJson, function(e, Setup) {
                                     if (e) throw e;
@@ -72,8 +63,6 @@ module.exports = function(reqJson, CB) {
                                         if (e) throw e;
                                         if (typeof(vmCreation.status) != 'string' || vmCreation.status != 'success')
                                             throw JSON.stringify(vmCreation);
-                                        //                        console.log('created VM!');
-                                        //                        console.log(pj.render(vmCreation));
                                         var uberPackUpdate = {
                                             service_id: reqJson.service.packid,
                                             status: '1',
@@ -102,8 +91,6 @@ module.exports = function(reqJson, CB) {
                                                     },
                                                     callback: function(e, res) {
                                                         return CB(err, JSON.stringify(UberUpdate));
-                                                        //                                err ? console.log(err) : console.log(res.body);
-                                                        //   process.exit();
                                                     }
                                                 }
                                                 client.Async(api_calls);
