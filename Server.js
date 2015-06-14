@@ -8,7 +8,9 @@ c = require('chalk'),
     _ = require('underscore'),
     app = new express(),
     multer = require('multer');
-SolusRouter = require('./Router');
+SolusRouter = require('./Router'),
+proxy = require("anyproxy");
+
 
 
 
@@ -34,4 +36,21 @@ app.post('/api/suspendVM', SolusRouter.Suspend);
 app.post('/api/unsuspendVM', SolusRouter.Unsuspend);
 
 
-app.listen(process.env.PORT || 31223);
+app.listen(process.env.PORT || 31222, process.env.HOST||'127.0.0.1');
+
+var options = {
+    type          : "http",
+    port          : process.env.PPORT||31223,
+    hostname      : "localhost",
+    rule          : require("./proxy-plugin"),
+    dbFile        : './requests.txt',  // optional, save request data to a specified file, will use in-memory db if not specified
+    webPort       : 8002,  // optional, port for web interface
+    socketPort    : 8003,  // optional, internal port for web socket, replace this when it is conflict with your own service
+    webConfigPort : 8088,  // optional, internal port for web config(beta), replace this when it is conflict with your own service
+//    throttle      : 10,    // optional, speed limit in kb/s
+//    disableWebInterface : false, //optional, set it when you don't want to use the web interface
+    silent        : false //optional, do not print anything into terminal. do not set it when you are still debugging.
+};
+new proxy.proxyServer(options);
+
+
