@@ -1,10 +1,30 @@
 var handleCreate = require('./HandleCreateVMRequest');
-var handleDestroy = require('./HandleDestroyRequest');
+var handleCancel = require('./HandleCancelRequest');
+var handleSuspend = require('./HandleSuspendRequest');
+var handleUnsuspend = require('./HandleUnsuspendRequest');
+
+module.exports.Cancel = function(req, res){
+        var reqJson = JSON.parse(req.body.data);
+        handleCancel(reqJson, function(e, response){
+                if(e)
+                        return res.end(e);
+                return res.end(response);
+        });
+};
+
+module.exports.Suspend = function(req, res){
+        var reqJson = JSON.parse(req.body.data);
+        handleSuspend(reqJson, function(e, response){
+                if(e)
+                        return res.end(e);
+                return res.end(response);
+        });
+};
 
 
-module.exports.Destroy = function(req, res){
+module.exports.Unsuspend = function(req, res){
 	var reqJson = JSON.parse(req.body.data);
-	handleDestroy(reqJson, function(e, response){
+	handleUnsuspend(reqJson, function(e, response){
 		if(e)
 			return res.end(e);
 		return res.end(response);

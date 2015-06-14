@@ -27,7 +27,21 @@ module.exports.Events = {
 
         },
     },
-    destroyVM: {
+    unsuspendVM: {
+        validate: function(reqJson) {
+            return reqJson.service.metadata.solusvmid > 0;
+        },
+        setup: function(reqJson, cb) {
+cb(null, {});
+        },
+        process: function(Solus, Setup, reqJson, cb) {
+Solus.sQuery({action: 'vserver-unsuspend', vserverid: reqJson.service.metadata.solusvmid}, function(e, r){
+	if(e)throw e;
+cb(e, r);
+});
+        },
+    },
+    suspendVM: {
         validate: function(reqJson) {
             return reqJson.service.metadata.solusvmid > 0;
         },
